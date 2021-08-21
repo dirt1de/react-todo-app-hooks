@@ -21,6 +21,30 @@ export default function App() {
       case "delete":{
         return state.filter(item=>item.id!==action.payload)
       }
+      case "completed":{
+        return state.map(item=>{
+          if(item.id===action.payload){
+            return {
+              ...item,
+              completed:!item.completed
+            }
+          }
+          return item
+        })
+      }
+      case "editText":{
+        return state.map(item=>{
+          if(item.id===action.payload.id){
+            return {
+              // this is how you edit the content of an object by 
+              // overwriting part of it
+              ...item,
+              text:action.payload.text
+            }
+          }
+          return item
+        }) 
+      }
       default:
         return state
     }
@@ -38,6 +62,11 @@ export default function App() {
         <button onClick={() => dispatch({type:"addPost"})}>Add new todo</button>
         <br />
         <br />
+        <div>
+          {state.map((item)=>{
+            return <h4 key={item.id}>{JSON.stringify(item)}</h4>
+          })}
+        </div>
         <TodoList todos={state}></TodoList>
       </div>
     </TodoContext.Provider>
